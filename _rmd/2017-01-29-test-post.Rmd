@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Welcome
 
-I'm a researcher and statistician interested in open science, computational reproducibility, and interesting ways to visualize data. In "*real life*" my main research focus is on sexual and reproductive health, and I may post occasionally about that in this space, but this site is mainly to host side analyses and projects that don't fit in to my main portfolio of work/aren't worth publishing in a scientific journal (or aren't developed enough to do that).
+I'm a researcher and statistician interested in open science, computational reproducibility, and interesting ways to visualize data. In "**real life**" my main research focus is on sexual and reproductive health, and I may post occasionally about that in this space, but this site is mainly to host side analyses and projects that don't fit in to my main portfolio of work/aren't worth publishing in a scientific journal (or aren't developed enough to do that).
 
 This blog is written completely in RStudio using Rmarkdown; I'd never have been able to get it set up without the invaluable advice given on [Andy South's blog](http://andysouth.github.io/blog-setup/), and (even more so), the [Jekyll-Now repository](https://github.com/barryclark/jekyll-now) created by Barry Clark. I won't do those posts justice trying to summarize them here, but suffice it to say that I tend to be helpless at any code/set-up that isn't explictly statistical, and it was still extremely straightforward (as long as you have a Git repository set up, and know the very basics of how to fork/commit/push).
 

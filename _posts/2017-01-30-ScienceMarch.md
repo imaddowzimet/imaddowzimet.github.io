@@ -1,12 +1,23 @@
 ---
-layout: post
 title: "March for Science"
 author: "Isaac Maddow-Zimet"
 published: true
 status: publish
 tags: R
+layout: post
 ---
+<style type="text/css">
  
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 20px
+}
+</style>
  
 
  

@@ -13,7 +13,6 @@ layout: post
  
 The [March for Science](https://www.marchforscience.com/) doesn't have a date yet, but recently I've been channeling my energies into making science-appropriate signs for the march. And because it's a march for science, I thought it would only be appropriate that the signs be open-source and reproducible. The signs (and all the R code used to make them!) are below -- feel free to copy it, use it, or modify it, and if you have other signs to suggest, let me know and I'll add them to the post (with all appropriate credit, of course).
   
-<br><br>
 **THIS IS NOT NORMAL sign (with distribution)**
  
 
@@ -45,7 +44,7 @@ title(main="THIS IS NOT NORMAL",              # Add title.
 
 {% highlight r %}
 par(mar = c(0,0,0,0), family="serif", bg="white")       # Set font and background color
-plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n',  # Plot an empty square
+plot(c(0, 1), c(0, 1), ann = F, bty = 'o', type = 'n',  # Plot an empty square
      xaxt = 'n', yaxt = 'n')
 text(.5,.65, expression(Omega), cex=22)                 # Place the Omega sign (you may need to futz                                                           with the x and y positions)
 text(.5,.2, "RESIST", cex=8)                            # Place the text
@@ -58,13 +57,14 @@ After I made this I found out that not only is this the symbol for the [well-kno
 <br><br><br><br>
  
 **RESIST sign (with ohm meter symbol)**  
+  
 (I thought this one was more clearly a unit of electrical resistance, as opposed to just a greek Omega, but I'm by no means an expert here, so ask an electrical engineer before you use it).
  
 
 {% highlight r %}
 # RESIST sign (with ohm meter symbol)
 par(mar = c(0,0,0,0), family="serif", bg="white")
-plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
+plot(c(0, 1), c(0, 1), ann = F, bty = 'o', type = 'n', xaxt = 'n', yaxt = 'n')
 text(.35,.75, expression(Omega), cex=15)
 text(.55,.65, expression(paste(""%.%"")), cex=15)
 text(.7,.67, "m", cex=11)

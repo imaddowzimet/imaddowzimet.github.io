@@ -36,7 +36,7 @@ title(main="THIS IS NOT NORMAL",              # Add title.
       outer=TRUE, cex.main=3)                 # Make it big.
 {% endhighlight %}
 
-<img src="/figures/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="750px" />
+<img src="/figures/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="750px" style="display: block; margin: auto;" />
  
  
 <br><br><br><br>

@@ -18,7 +18,7 @@ The [March for Science](https://www.marchforscience.com/) doesn't have a date ye
   
 **THIS IS NOT NORMAL sign (with distribution)**
 
-```{r, out.width = '750px', dpi=200}
+```{r, out.width = '750px', dpi=500, fig.align='center'}
 # THIS IS NOT NORMAL sign (with distribution)
 distribution <- rnbinom(100000, 2, .01)       # Choose distribution (generate whatever you want!)
 par(family="serif", bg="#ade0e6")             # Set font and background color

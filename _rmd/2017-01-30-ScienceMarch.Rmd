@@ -61,10 +61,10 @@ After I made this I found out that not only is this the symbol for the [well-kno
 # RESIST sign (with ohm meter symbol)
 par(mar = c(0,0,0,0), family="serif", bg="white")
 plot(c(0, 1), c(0, 1), ann = F, bty = 'o', type = 'n', xaxt = 'n', yaxt = 'n')
-text(.35,.75, expression(Omega), cex=15)
-text(.55,.65, expression(paste(""%.%"")), cex=15)
-text(.7,.67, "m", cex=11)
-text(.5,.4, "RESIST", cex=5)
+text(.32,.75, expression(Omega), cex=18)
+text(.55,.63, expression(paste(""%.%"")), cex=18)
+text(.75,.65, "m", cex=14)
+text(.5,.2, "RESIST", cex=8)
 ```  
 
 For this last one, in particular, you might need to spend some time positioning things right, mainly because I couldn't figure out how to embed a dot product sign within one expression (you would think it would be straightforward, but I ran into some trouble getting it to look right). So this is a bit cobbled together - the omega, dot product and m are each placed separately and then aligned by eye. 

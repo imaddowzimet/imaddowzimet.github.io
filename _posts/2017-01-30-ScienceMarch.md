@@ -65,10 +65,10 @@ After I made this I found out that not only is this the symbol for the [well-kno
 # RESIST sign (with ohm meter symbol)
 par(mar = c(0,0,0,0), family="serif", bg="white")
 plot(c(0, 1), c(0, 1), ann = F, bty = 'o', type = 'n', xaxt = 'n', yaxt = 'n')
-text(.35,.75, expression(Omega), cex=15)
-text(.55,.65, expression(paste(""%.%"")), cex=15)
-text(.7,.67, "m", cex=11)
-text(.5,.4, "RESIST", cex=5)
+text(.32,.75, expression(Omega), cex=18)
+text(.55,.63, expression(paste(""%.%"")), cex=18)
+text(.75,.65, "m", cex=14)
+text(.5,.2, "RESIST", cex=8)
 {% endhighlight %}
 
 <img src="/figures/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600px" style="display: block; margin: auto;" />

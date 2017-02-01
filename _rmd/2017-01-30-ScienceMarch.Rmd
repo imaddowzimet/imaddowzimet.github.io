@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Open-Source Signs for the March for Science
 
-The [March for Science](https://www.marchforscience.com/) doesn't have a date yet, but recently I've been channeling my energies into making science-appropriate signs for the march. And because it's a march for science, I thought it would only be appropriate that the signs be open-source and reproducible. The signs (and all the R code used to make them!) are below -- feel free to copy it, use it, or modify it, and if you have other signs to suggest, let me know and I'll add them to the post (with all appropriate credit, of course).
+The [March for Science](https://www.marchforscience.com/) just announced its [date](https://twitter.com/ScienceMarchDC/status/826823981013561345)(!), so I've been channeling my energies into making science-appropriate signs for the march. And because it's a march for science, I thought it would only be appropriate that the signs be open-source and reproducible. The signs (and all the R code used to make them!) are below -- feel free to copy it, use it, or modify it, and if you have other signs to suggest, let me know and I'll add them to the post (with all appropriate credit, of course).
   
 **THIS IS NOT NORMAL sign (with distribution)**
 

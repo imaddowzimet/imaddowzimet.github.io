@@ -18,7 +18,7 @@ The [March for Science](https://www.marchforscience.com/) doesn't have a date ye
 <br><br>
 **THIS IS NOT NORMAL sign (with distribution)**
 
-```{r, out.width = '750px', dpi=1000, fig.align='center'}
+```{r, out.width = '600px', dpi=1000, fig.align='center'}
 # THIS IS NOT NORMAL sign (with distribution)
 distribution <- rnbinom(100000, 2, .01)       # Choose distribution (generate whatever you want!)
 par(family="serif", bg="#ade0e6")             # Set font and background color
@@ -42,7 +42,7 @@ title(main="THIS IS NOT NORMAL",              # Add title.
 <br><br><br><br>
 
 **RESIST sign (with ohm symbol)**
-```{r, out.width = '750px', dpi=1000, fig.align='center'}
+```{r, out.width = '600px', dpi=1000, fig.align='center'}
 par(mar = c(0,0,0,0), family="serif", bg="white")       # Set font and background color
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n',  # Plot an empty square
      xaxt = 'n', yaxt = 'n')
@@ -57,7 +57,7 @@ After I made this I found out that not only is this the symbol for the [well-kno
 **RESIST sign (with ohm meter symbol)**  
 (I thought this one was more clearly a unit of electrical resistance, as opposed to just a greek Omega, but I'm by no means an expert here, so ask an electrical engineer before you use it).
 
-```{r, out.width = '750px', dpi=1000, fig.align='center'}
+```{r, out.width = '600px', dpi=1000, fig.align='center'}
 # RESIST sign (with ohm meter symbol)
 par(mar = c(0,0,0,0), family="serif", bg="white")
 plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')

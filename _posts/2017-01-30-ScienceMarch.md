@@ -36,7 +36,7 @@ title(main="THIS IS NOT NORMAL",              # Add title.
       outer=TRUE, cex.main=3)                 # Make it big.
 {% endhighlight %}
 
-<img src="/figures/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="750px" style="display: block; margin: auto;" />
+<img src="/figures/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="600px" style="display: block; margin: auto;" />
  
  
 <br><br><br><br>
@@ -51,7 +51,7 @@ text(.5,.65, expression(Omega), cex=22)                 # Place the Omega sign (
 text(.5,.2, "RESIST", cex=8)                            # Place the text
 {% endhighlight %}
 
-<img src="/figures/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="750px" style="display: block; margin: auto;" />
+<img src="/figures/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="600px" style="display: block; margin: auto;" />
  
 After I made this I found out that not only is this the symbol for the [well-known unit of resistance](https://en.wikipedia.org/wiki/Ohm), but that it was also a common symbol of the [resistance movement](https://en.wikipedia.org/wiki/Omega) [against the Vietnam draft](http://www.ebay.com/itm/272339661127). Of course it's also [Darkseid's](https://en.wikipedia.org/wiki/Darkseid) symbol, but what are you going to do. 
  
@@ -71,7 +71,7 @@ text(.7,.67, "m", cex=11)
 text(.5,.4, "RESIST", cex=5)
 {% endhighlight %}
 
-<img src="/figures/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="750px" style="display: block; margin: auto;" />
+<img src="/figures/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600px" style="display: block; margin: auto;" />
  
 For this last one, in particular, you might need to spend some time positioning things right, mainly because I couldn't figure out how to embed a dot product sign within one expression (you would think it would be straightforward, but I ran into some trouble getting it to look right). So this is a bit cobbled together - the omega, dot product and m are each placed separately and then aligned by eye. 
  

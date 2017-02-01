@@ -12,7 +12,8 @@ layout: post
 ## Open-Source Signs for the March for Science
  
 The [March for Science](https://www.marchforscience.com/) doesn't have a date yet, but recently I've been channeling my energies into making science-appropriate signs for the march. And because it's a march for science, I thought it would only be appropriate that the signs be open-source and reproducible. The signs (and all the R code used to make them!) are below -- feel free to copy it, use it, or modify it, and if you have other signs to suggest, let me know and I'll add them to the post (with all appropriate credit, of course).
- 
+  
+  
 **THIS IS NOT NORMAL sign (with distribution)**
  
 
@@ -35,7 +36,7 @@ title(main="THIS IS NOT NORMAL",              # Add title.
       outer=TRUE, cex.main=3)                 # Make it big.
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-1](/figures/unnamed-chunk-1-1.png)
+<img src="/figures/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="750px" />
  
  
 <br><br><br><br>

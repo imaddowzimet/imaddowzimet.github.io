@@ -17,11 +17,12 @@ I'm mainly interested in R as a data exploration and visualization tool, since I
 
 I also want to acknowledge that a lot of other people have used this data to do all sorts of [interesting](https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/) [things](http://www.alisetifentale.net/research-blog-at/2016/2/21/judging-the-artdatathon-at-the-museum-of-modern-art) (and maybe the very things I'm doing here!). I'm going to try to link to them when I can, but I'm sure I'll have missed some things; feel free to let me know if I have. So, without further ado:
 
-##The Research Question
+**The Research Question**  
 
 It is I think pretty well known that many museums' permanent collections, including [MoMA's](http://themomacollection.com/article/acquisitions/), tend to be skewed towards 'western' artists, because of historical inequities in what was (or is) considered notable or worthy art (and in the case of MoMA, probably what was/is considered "modern" art. I'm by no means an art historian, but these seem like safe bets). What I'm interested in, however, is how this has shifted over time, as art trends and social contexts have changed. There's been at least one very nice [visualization](http://woojink.com/moma/) that has looked at *exhibitions* by artist's nation of origin over time, but I thought it would be interesting to instead look at the museum as a *collector*, whose permanent collection acquisitions reflect institutional priorities and larger sociopolitical trends.  Luckily, the MoMA data has information for almost every piece in their permanent collection on who the artist(s) were, their countries of origin (though there were complications with this), and the date the piece was first acquired.
 
-##The Visualization
+**The Visualization**
+ 
 For those less interested in the code/process, I thought I would put the "final" visualization up front (for those interested in code/process, welcome! You will find it in excruciating detail in the next section). For this first crack at visualizing the data, it seemed like it made sense to show countries of origin on a world map, with shading related to how many pieces acquired in a given year were made by an artist with that nationality.  Since I wanted to show how this changed over time, I broke the data into 5 year 'chunks' - so the chunk "1931-1935" represents the acquisitions made by the museum in the early 30s, the chunk 1936-1940 represents the same but for the late 30s, and so on. And because I am a child of the internet age, I wanted to make it a GIF. 
 
 ![](https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/figures/animation.gif))
@@ -204,7 +205,7 @@ artmapfull$logfreq <- log(artmapfull$Freq)
 
 
 Now I could just produce these maps individually - here's 1931-1935:
-```{r, out.width = '600px', dpi=800, fig.align='center'}
+```{r, out.width = '900px', dpi=800, fig.align='center'}
 # Map the first year, to try it out
 ggplot(artmapfull[artmapfull$year==1,], aes(long, lat, group=group, fill=logfreq)) +geom_polygon() +
   coord_equal() + guides(fill=FALSE) + scale_fill_distiller(palette = "OrRd", direction= 1 ) +
@@ -226,7 +227,7 @@ years <- c("1931-1935", "1936-1940", "1941-1945", "1946-1950",  "1951-1955", "19
 "1971-1975", "1976-1980","1981-1985", "1986-1990","1991-1995",  "1996-2000",  "2001-2005",  "2006-2010", "2011-2015")
 
 library(animation)
-ani.options(interval=1.5,  ani.width = 800, ani.height= 800)
+ani.options(interval=1.5,  ani.width = 900, ani.height= 900)
 saveGIF(
   for (i in 1:length(years)){
     g<-ggplot(artmapfull[artmapfull$year==i,], aes(long, lat, group=group, fill=logfreq)) +geom_polygon() +

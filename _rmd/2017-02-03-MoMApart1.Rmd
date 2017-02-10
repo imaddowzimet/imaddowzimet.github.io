@@ -17,11 +17,11 @@ I'm mainly interested in R as a data exploration and visualization tool, since I
 
 I also want to acknowledge that a lot of other people have used this data to do all sorts of [interesting](https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/) [things](http://www.alisetifentale.net/research-blog-at/2016/2/21/judging-the-artdatathon-at-the-museum-of-modern-art) (and maybe the very things I'm doing here!). I'm going to try to link to them when I can, but I'm sure I'll have missed some things; feel free to let me know if I have. So, without further ado:
 
-###The Research Question
+##The Research Question
 
 It is I think pretty well known that many museums' permanent collections, including [MoMA's](http://themomacollection.com/article/acquisitions/), tend to be skewed towards 'western' artists, because of historical inequities in what was (or is) considered notable or worthy art (and in the case of MoMA, probably what was/is considered "modern" art. I'm by no means an art historian, but these seem like safe bets). What I'm interested in, however, is how this has shifted over time, as art trends and social contexts have changed. There's been at least one very nice [visualization](http://woojink.com/moma/) that has looked at *exhibitions* by artist's nation of origin over time, but I thought it would be interesting to instead look at the museum as a *collector*, whose permanent collection acquisitions reflect institutional priorities and larger sociopolitical trends.  Luckily, the MoMA data has information for almost every piece in their permanent collection on who the artist(s) were, their countries of origin (though there were complications with this), and the date the piece was first acquired.
 
-###The Visualization
+##The Visualization
 For those less interested in the code/process, I thought I would put the "final" visualization up front (for those interested in code/process, welcome! You will find it in excruciating detail in the next section). For this first crack at visualizing the data, it seemed like it made sense to show countries of origin on a world map, with shading related to how many pieces acquired in a given year were made by an artist with that nationality.  Since I wanted to show how this changed over time, I broke the data into 5 year 'chunks' - so the chunk "1931-1935" represents the acquisitions made by the museum in the early 30s, the chunk 1936-1940 represents the same but for the late 30s, and so on. And because I am a child of the internet age, I wanted to make it a GIF. 
 
 ![](https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/figures/animation.gif))
@@ -30,7 +30,7 @@ Now this may go a bit fast, but generally, what you can see (besides the fact th
 
 There are quite a few more notes about the process and the data below, but generally, I think this visualization approach, while it looks cool, is actually a bit hard to follow. I don't know that we need this level of detail, for one, and the point that it's trying to make is a bit lost. In future posts, I'm going to explore some less fancy ways to show some of the same trends; for now, all of you code lovers out there, see below:
 
-### Struggling With the Data
+##Struggling With the Data
 As you'll see, this data was a pain to work with, which led me to load/install so many packages that I'm not actually sure which ones were even necessary in the end. I'm putting them all here, for completeness' sake, but it's possibly you don't need all of them - at some point I'll try to go through and remove the unecessary ones. 
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
@@ -170,7 +170,7 @@ winkel <- "+proj=wintri"
 countries_winkel <- spTransform(countries, CRS(winkel))
 
 # Add some margins to the plot
-par(mar=c(1,1,1,1))
+# par(mar=c(1,1,1,1))
 
 # convert the map object to a dataframe (so ggplot can use it)
 artmap <- tidy(countries_winkel, region="name_sort")

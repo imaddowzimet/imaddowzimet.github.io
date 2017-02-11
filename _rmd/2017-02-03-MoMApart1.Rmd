@@ -31,7 +31,8 @@ Now this may go a bit fast, but generally, what you can see (besides the fact th
 
 There are quite a few more notes about the process and the data below, but generally, I think this visualization approach, while it looks cool, is actually a bit hard to follow. I don't know that we need this level of detail, for one, and the point that it's trying to make is a bit lost. In future posts, I'm going to explore some less fancy ways to show some of the same trends; for now, all of you code lovers out there see below:
 
-**Struggling With the Data**
+**Struggling With the Data**  
+
 As you'll see, this data was a pain to work with, which led me to load/install so many packages that I'm not actually sure which ones were even necessary in the end. I'm putting them all here, for completeness' sake, but it's possibly you don't need all of them - at some point I'll try to go through and remove the unecessary ones. 
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
@@ -219,7 +220,7 @@ ggplot(artmapfull[artmapfull$year==1,], aes(long, lat, group=group, fill=logfreq
 But just for fun, I thought it would be nice to make a gif using the *animation* package. Getting this package to work is a bit involved, especially on a Mac (you have to install a program called ImageMagick, which is not as simple as it sounds; [Google](http://lmgtfy.com/?q=imagemagick) for details), but the code below should get you started.
 
 
-``` {r, results='hide'}
+``` {r, results='hide', message=FALSE, warning=FALSE}
 
 # Create list of years (for label)
 years <- c("1931-1935", "1936-1940", "1941-1945", "1946-1950",  "1951-1955", "1956-1960",  "1961-1965",  "1966-1970",

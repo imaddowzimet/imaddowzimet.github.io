@@ -25,13 +25,13 @@ It is I think pretty well known that many museums' permanent collections, includ
  
 For those less interested in the code/process, I thought I would put the "final" visualization up front (for those interested in code/process, welcome! You will find it in excruciating detail in the next section). For this first crack at visualizing the data, it seemed like it made sense to show countries of origin on a world map, with shading related to how many pieces acquired in a given year were made by an artist with that nationality.  Since I wanted to show how this changed over time, I broke the data into 5 year 'chunks' - so the chunk "1931-1935" represents the acquisitions made by the museum in the early 30s, the chunk 1936-1940 represents the same but for the late 30s, and so on. And because I am a child of the internet age, I wanted to make it a GIF. 
 
-![](https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/figures/animation.gif))
+![](https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/figures/animation.gif)
 
 Now this may go a bit fast, but generally, what you can see (besides the fact that the vast majority of acquisitions in *every* period are from American artists), is that the MoMA started to acquire more art from Latin American artists starting in the late 1930s, and that in the 1960s, started acquiring much more art from countries in Asia. It's not really until the 2000s that MoMA started acquiring meaningful amounts of art from any countries in Africa, and even then, the numbers are fairly limited.  
 
-There are quite a few more notes about the process and the data below, but generally, I think this visualization approach, while it looks cool, is actually a bit hard to follow. I don't know that we need this level of detail, for one, and the point that it's trying to make is a bit lost. In future posts, I'm going to explore some less fancy ways to show some of the same trends; for now, all of you code lovers out there, see below:
+There are quite a few more notes about the process and the data below, but generally, I think this visualization approach, while it looks cool, is actually a bit hard to follow. I don't know that we need this level of detail, for one, and the point that it's trying to make is a bit lost. In future posts, I'm going to explore some less fancy ways to show some of the same trends; for now, all of you code lovers out there see below:
 
-##Struggling With the Data
+**Struggling With the Data**
 As you'll see, this data was a pain to work with, which led me to load/install so many packages that I'm not actually sure which ones were even necessary in the end. I'm putting them all here, for completeness' sake, but it's possibly you don't need all of them - at some point I'll try to go through and remove the unecessary ones. 
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
@@ -140,7 +140,7 @@ mytable                                           # print table of counts! This 
 So already we can tell we have a problem (aside from how gigantic and unwieldy this table is). Almost half of the pieces are from the US, and the proportion of pieces from most other countries are so small that they are going to be impossible to put on any kind of meaningful scale. Luckily, the solution here is simple, which is that we can transform the variable, and plot the counts on a *log scale* instead. This has the effect of compressing the distribution; we just need to remember that each one unit increase in the logged count is an *exponential* increase in the raw count - so unlike a rearview mirror, distances are bigger than they appear. For this case, when we are just mapping values, this kind of logged outcome isn't a huge deal in my opinion - it will still give you an idea of the general trend, and is actually a nice way to look at change over time - but for other types of visualizations, it could be misleading or hard to interpret (something I'll maybe get into in another post). I'm actually going to log this outcome in a later part of the code, because it's a bit easier to do there, but I wanted to include this as a flag that it is always important to look at some simple tabulations, if possible, before getting to more complicated visualizations.
 
 I said I wanted to look at this over time, so I need to work a bit with the date acquired variable. The code below first converts the variable from string to date format (using the *extremely* useful **anytime** function, which saved me even worrying about how R deals with dates), checks for missing data, and then creates five year breaks. 
-```{r}
+```{r, results='hide'}
 # convert from string to date format
 dfFinal$DateAcquired <- anytime(dfFinal$DateAcquired)
 
@@ -157,7 +157,7 @@ subsets<-split(dfFinal, dfFinal$fiveyear, drop=TRUE)         # and break it into
 ```
 
 I then can actually do the mapping! You'll need to download world shape files; I downloaded the ones I use from [Natural Earth](http://www.naturalearthdata.com/downloads/110m-cultural-vectors/), a truly awesome site, which you can read about more [here](http://www.naturalearthdata.com).
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 ##################################################
 # Map Data prep
 #################################################
@@ -216,7 +216,6 @@ ggplot(artmapfull[artmapfull$year==1,], aes(long, lat, group=group, fill=logfreq
   panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
   panel.grid.minor=element_blank(),plot.background=element_blank())
 ```
-
 But just for fun, I thought it would be nice to make a gif using the *animation* package. Getting this package to work is a bit involved, especially on a Mac (you have to install a program called ImageMagick, which is not as simple as it sounds; [Google](http://lmgtfy.com/?q=imagemagick) for details), but the code below should get you started.
 
 

@@ -1,0 +1,235 @@
+---
+title: "Playing around with MoMA data (Part 2: Getting less fancy)"
+author: "Isaac Maddow-Zimet"
+published: no
+status: process
+tags: R
+layout: post
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Preamble**   
+So the [map](https://imaddowzimet.github.io/MoMApart1/) was all well and good, but it wasn't actually that easy to look at carefully.  In some ways it was information overload -- there are ~195 countries in the world (though somewhat less are represented in the dataset), which is really too much to look at at once. So for this post, I thought we could go backwards and simplify -- look at the broadest, easiest ways to look at these data, and then slowly add more complicated views. 
+
+So I'm going to go ahead and load a few libraries, and then I'm going to load the data that we already manipulated in the last post (so we don't have to go through all that meshugganeh again). This is before I merged it with the map shapefiles, so it's just a dataframe with every piece of art for which we have nationality information (and pieces of art with multiple artist nationalities listed twice), as well as some information about when it was acquired.     
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+########################
+# SET-UP
+#######################
+library(plyr)
+library(ggplot2)
+library(scales)
+library(tidyr)
+library(gridExtra)
+library(plotrix)
+load("/Users/isaacmaddowzimet/imaddowzimet.github.io/CleanedMoMA.Rda")
+```
+  
+**Going simple**  
+So the very easiest way to solve the "there are too many countries in the world" problem is to group them by region. We lose a lot of information this way, but it might be easier to see what is going on (and then we can always add more complexity later). I pulled together a crosswalk using UN regions and subregions, which is saved here, and then merged it with my dataset.
+
+```{r}
+regions       <- read.csv("/Users/isaacmaddowzimet/imaddowzimet.github.io/datamisc/ContinentCrosswalk.csv")
+dfwithregions <- join(dfFinal, regions, by='Country', type='left')
+```
+
+After I merge, I want to check that there aren't any orphan countries, without regions assigned to them:
+```{r}
+orphans <- table(dfwithregions[is.na(dfwithregions$Region)          # Tabulate if region is missing
+                               & !is.na(dfwithregions$Country),     # and country is not missing 
+                               c("Country")])
+orphans[orphans>0]                                                  # show table (and suppress the empty cells)
+```
+
+So it seems like the only problem is Holland. Actually, I'm cheating a bit because I had a huge number of issues when I first did this merge - countries are named extremely inconsistently between the datasets, and some countries in the MoMA dataset don't exist anymore (like Yugoslavia). I fixed all of these in the crosswalk itself, but I wanted to show the issue with Holland because it was so silly, and so typical. Holland isnt merging correctly because in my main dataset it has a space after it. It's "Holland ", instead of "Holland". That's enough to drop more than 3,000 cases that I would have never noticed if I just plotted the data without doing these types of checks. THE MORAL: keep track of your missing values like you would your firstborn, because they will absolutely wander off in the supermarket while you aren't paying attention.  
+  
+Luckily, this is an easy (albeit somewhat manual) fix:  
+
+```{r}
+dfwithregions$Region[dfwithregions$Country=="Holland "] <- "EUROPE"
+dfwithregions$Subregion[dfwithregions$Country=="Holland "] <- "Western Europe"
+```
+
+**Going simple (TAKE 2)**  
+
+OK, with that little bit of data manipulation out of the way, let's make some simple plots.    
+
+First, we can just look at the breakdown by region in simple bar chart.  
+
+```{r, fig.height=4, fig.width=8, dev='svg', fig.align='center'}
+regiontable             <- table(dfwithregions$Region) # Make table of frequencies
+regiontabledf           <- as.data.frame(sort(regiontable, decreasing = T))          # convert to data frame
+colnames(regiontabledf) <- c("Region", "Freq")
+ggplot(data=regiontabledf, 
+       aes(x=Region, y=Freq)) +
+       geom_bar(stat='identity', fill='indianred1') +
+       theme_bw()+
+       scale_y_continuous(name="Number of artworks", labels = comma)+
+       ggtitle("Number of artworks in MoMA permanent collection by nationality of artist, grouped by region")+
+       theme(plot.title = element_text(hjust = 0.5, size=10))
+
+```
+
+
+So, no surprise, most of the artworks in the permanent collection are from artists born in Europe and North America, and hardly any are from Africa or Oceania. But our research question was how acquisitions have shifted over time, so we really want to break these up into five year groups (like we did before, in the map). But how are we going to show change over time in such a simple graph?  In other words, how can we add another *dimension*, in addition to region and frequency?
+
+**Interdimensional travel**   
+Actually, nothing so complicated (*yet*). The easiest way to add time to a bar chart is actually just to make multiple bar charts, one for each five year period, and then put them next to each other (this is also often called "small multiples"). There are some ways to do this in ggplot fairly simply, but I actually don't love the way they look, so I ended up doing this in base R instead. One of the problems with doing these multiple bar charts is that they end up having a lot of repeated information in the axes and labels, so I tweaked code a bit so that the y-axes only show up in the graphs on the left side, and dropped the x-axis labels completely, replacing them with a color legend at the bottom.  Just for fun, I grabbed the color palette from (this site)[http://colorlisa.com/], which creates palettes based on famous pieces of art.  Of course, there were hardly any artists on that site from countries outside of the US or Europe (and who also used nicely contrasting colors), so instead I chose Bridget Riley, an English artist I had never heard of before, but whose colors I thought might work nicely.
+
+```{r, fig.height=8, fig.width=8, dev='svg', fig.align='center'}
+par(mfrow=c(5,4), mar=c(.2, .2, 1, .2), oma=c(1,2,2,0), family='serif')
+
+# Data manipulation
+dfwithregions$Region<- factor(dfwithregions$Region, 
+                              levels(dfwithregions$Region)[c(5, 3, 4, 2, 1, 6)])  # I set the order of countries manually this time (instead of sorting by frequency), because we want them to stay consistent across the graphs 
+
+# Split into datasets for each five year period
+subsets<-split(dfwithregions, dfwithregions$fiveyear, drop=TRUE) 
+
+# Define Bridgette Riley color palette
+riley <- c("#67C1EC", "#DE6736", "#7BBC53", "#FAB9AC", "#E6B90D",  "lightgrey" )
+
+for (i in 1:17) {
+regiontable             <- table(subsets[[i]]$Region)                                  # Make table of frequencies
+log(regiontable)
+barplot(regiontable, xaxt='n', ylim=c(0,13000), col=riley
+        , yaxt= if ((i+3)%%4!=0) 'n', yaxp=c(0, 12000, 3))                           # this is a bit tricky, but it's a way to make R only draw y axes for graphs in column 1. It does this with a bit of math - if the iteration we are on +3 is not evenly divisible by 4, we hide the y-axis)
+title(paste(1925+(i*5), "-", 1930+(i*5), sep=""), line=-1.5)
+axis(side=1, at=c(0, 7.5), labels=FALSE)  # the x-axis tick at 7.5 won't appear since it is out of range, but otherwise the line won't show up
+}
+
+# All this below is just to get the legend positioned correctly, particularly the horizontal spacing
+# First line of legend
+legendtexttop=c("North Am.", "Eur.", "LAC")
+xcoords <- c(0, 4, 6.5)                                       # This determines the spacing between the legend items
+secondvectortop <- (1:length(legendtexttop))-1                # But you need to scale them by the length of the text
+textwidthstop <- xcoords/secondvectortop
+textwidthstop[1] <- 0                                         # and set the first to 0
+legend(10,10000, legendtexttop, fill=riley[1:3], xpd=NA,     # (xpd=NA lets us put the legend outside of the plot area, in the outer margins)
+       horiz=TRUE, cex=2.2, text.width = textwidthstop, bty='n')
+
+
+# Second line of legend
+legendtextbottom=c("Asia", "Africa", "Oceania")
+legend(10,6000, legendtextbottom, fill=riley[4:6], xpd=NA,     # xpd=NA lets us put the legend outside of the plot area, in the outer margins
+       horiz=TRUE, cex=2.2, text.width = textwidthstop, bty='n')
+
+# Title graph
+title("Number of pieces acquired by region, 1930-2015", outer=TRUE, cex.main=2)
+
+```
+
+```{r, fig.height=8, fig.width=8, dev='svg', fig.align='center'}
+par(mfrow=c(5,4), mar=c(.2, .2, 1, .2), oma=c(1,2,2,0), family='serif')
+for (i in 1:17) {
+regiontable             <- prop.table(table(subsets[[i]]$Region))*100                          # Make table of proportions
+log(regiontable)
+barplot(regiontable, xaxt='n', ylim=c(0,100), col=riley
+        , yaxt= if ((i+3)%%4!=0) 'n', yaxp=c(0, 100, 2))                           # this is a bit tricky, but it's a way to make R only draw y axes for graphs in column 1. It does this with a bit of math - if the iteration we are on +3 is not evenly divisible by 4, we hide the y-axis)
+title(paste(1925+(i*5), "-", 1930+(i*5), sep=""), line=-1.5)
+axis(side=1, at=c(0, 7.5), labels=FALSE)  # the x-axis tick at 7.5 won't appear since it is out of range, but otherwise the line won't show up
+}
+
+# Add legend (we've already specified many of the values needed in the last code chunk)
+legend(10,60, legendtexttop, fill=riley[1:3], xpd=NA,     
+       horiz=TRUE, cex=2.2, text.width = textwidthstop, bty='n')
+legend(10,40, legendtextbottom, fill=riley[4:6], xpd=NA,     
+       horiz=TRUE, cex=2.2, text.width = textwidthstop, bty='n')
+
+# Title graph
+title("Percent of pieces acquired by region, 1930-2015", outer=TRUE, cex.main=2)
+
+```
+
+
+
+
+
+```{r, fig.height=8, fig.width=8, dev='svg', fig.align='center'}
+par(mfrow=c(5,4), mar=c(.2, .2, 1, .2), oma=c(1,2,2,0), family='serif')
+
+for (i in 1:17) {
+regiontable             <- table(subsets[[i]]$Region)                                # Make table of frequencies
+log(regiontable)
+barplot(log(regiontable), xaxt='n', ylim=c(0,12), col=riley
+        , yaxt= if ((i+3)%%4!=0) 'n', yaxp=c(0, 10, 2))                                               # this is a bit tricky, but it's a way to make R only draw y axes for graphs in column 1. It does this with a bit of math - if the iteration we are on +3 is not evenly divisible by 4, we hide the y-axis)
+title(paste(1925+(i*5), "-", 1930+(i*5), sep=""), line=-1.5)
+axis(side=1, at=c(0, 7.5), labels=FALSE)  # the tick at 7.5 won't appear since it is out of range, but otherwise the line won't show up
+}
+# Add legend (we've already specified many of the values needed in the last code chunk)
+legend(10,8, legendtexttop, fill=riley[1:3], xpd=NA,     
+       horiz=TRUE, cex=2.2, text.width = textwidthstop, bty='n')
+legend(10,6, legendtextbottom, fill=riley[4:6], xpd=NA,     
+       horiz=TRUE, cex=2.2, text.width = textwidthstop, bty='n')
+
+# Title graph
+title("Number of pieces acquired by region (natural log), 1930-2015", outer=TRUE, cex.main=2)
+```
+
+
+```{r, fig.height=8, fig.width=8, dev='svg', fig.align='center'}
+par(family='serif', oma=c(0,0,0,2))
+# In order to make a stacked area chart, we need to put the logged frequencies into a matrix
+stackedmatrix <- matrix(NA, 17,6)            # With 17 rows (for each five year period), and 6 columns (for each region)
+for (i in 1:17) {
+  stackedmatrix[i,]             <- log(table(subsets[[i]]$Region))            
+  
+}
+# One little fix:
+stackedmatrix[stackedmatrix=="-Inf"] <- 0   # When we log 0s, they become undefined, so we need to set them back to 0.  
+
+# create x axis labels
+xaxislabels <- seq(from=1935, to=2015, by=5)
+
+# Chart!
+stackpoly(stackedmatrix, stack=TRUE, xaxlab=xaxislabels, ylim=c(0,40), col=riley, axis4=FALSE)  
+
+# Title!
+title("Number of pieces acquired by region (natural log), 1930-2015")
+
+# Legend!
+legend(3.5,-2, legendtexttop, fill=riley[1:3], xpd=NA,     
+       horiz=TRUE, cex=1, text.width = textwidthstop, bty='n')
+legend(3.5,-3, legendtextbottom, fill=riley[4:6], xpd=NA,     
+       horiz=TRUE, cex=1, text.width = textwidthstop, bty='n')
+
+```
+
+
+```{r, fig.height=8, fig.width=8, dev='svg', fig.align='center'}
+
+par(family='serif', oma=c(0,0,0,2))
+
+# Scale matrix 
+stackedmatrixscaled  <- t(apply(stackedmatrix, 1, function(x)((10/sum(x))*x)))
+
+# Chart!
+stackpoly(stackedmatrixscaled, stack=TRUE, xaxlab=xaxislabels, ylim=c(0,10), col=riley, axis4=FALSE)  
+
+# Title!
+title("Distribution of pieces acquired by region (natural log), 1930-2015")
+
+# Legend!
+legend(3.5,-0.6, legendtexttop, fill=riley[1:3], xpd=NA,     
+       horiz=TRUE, cex=1, text.width = textwidthstop, bty='n')
+legend(3.5,-1, legendtextbottom, fill=riley[4:6], xpd=NA,     
+       horiz=TRUE, cex=1, text.width = textwidthstop, bty='n')
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

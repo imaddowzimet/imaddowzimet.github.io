@@ -2,7 +2,7 @@
 title: "March for Science"
 author: "Isaac Maddow-Zimet"
 published: no
-status: process
+status: publish
 tags: R
 layout: post
 ---

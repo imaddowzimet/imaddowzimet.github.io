@@ -11,7 +11,11 @@ layout: post
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+![]("/Users/isaacmaddowzimet/imaddowzimet.github.io/methodmix.svg")
+
+
 **Preamble**  
+  
 I was having fun playing with stacked area graphs in my last [post](https://imaddowzimet.github.io/MoMApart2/), so I thought for this one I would extend them to a topic area that's much more in my wheelhouse: contraception. There's a large survey that I work with a lot - the National Survey of Family Growth (NSFG) - that tracks what contraceptive methods people use, and since it's administered at fairly regular periods, you can use it to track shifts over time.  It's a nice one to use because if you make the denominator contraceptive users, the percent of people using each method adds up to 100.  I also think the chart (as you'll see) is a nice case study in A) how to deal with data that has a ridiculous number of categories, and B) how to graphically convey situations where you only have data at specific points in time, but want to show an estimated trend.   
 
 **The Good Stuff (the code)**
@@ -29,7 +33,7 @@ library(imputeTS)
 I'm getting the data from published NSFG reports, as opposed to running anything from the dataset directly -- mainly because it's a lot more straightforward for the purposes of this post. The data are from Table 4 of [this report](https://www.cdc.gov/nchs/data/series/sr_23/sr23_029.pdf) for the years 1982, 1995, and 2002, Table 1 of [this report](https://www.cdc.gov/nchs/data/ad/ad182.pdf) for 1988, and and Table 1 of [this report](https://www.cdc.gov/nchs/data/nhsr/nhsr086.pdf) for 2008 and 2012. I used [Tabula](http://tabula.technology/), one of the most amazing pieces of software ever created, to extract the data tables in the PDF reports. These tables all describe current use of a method (in other words, the method the respondent said they were using during the month they were interviewed), among women aged 15-44.  It doesn't take into account whether the respondent was sexually active that month, or why they were using contraception - it's really just a description of what methods women were using at a snapshot in time.  
 
 ```{r, message=FALSE, warning=FALSE}
-# Load data
+# Load data (you'll need to change the filepath if you download the data)
 data <- as.data.frame(read_xls("/Users/isaacmaddowzimet/imaddowzimet.github.io/method mix 1982-2012.xls", sheet="Recode 1"))
 
 # Change NAs to 0s (in some years, some methods didn't exist yet)
@@ -117,6 +121,9 @@ mtext(expression(bold(" Contraceptive method mix among contraceptive users \n ag
 
 # Add dotted lines for actual data
 abline(v=c(7,14,21,27), lty=3, lwd=2)
+
+# Add footnote
+mtext("Note: trends estimated using cubic spline; dotted lines denote years with data", outer=TRUE, cex=.9, side=1, line=-2)
 ```
   
 

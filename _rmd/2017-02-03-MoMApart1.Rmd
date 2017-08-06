@@ -2,7 +2,7 @@
 title: "Playing around with MoMA data (Part I: Mapping)"
 author: "Isaac Maddow-Zimet"
 published: TRUE
-status: process
+status: publish
 tags: R
 layout: post
 ---
@@ -226,7 +226,7 @@ years <- c("1931-1935", "1936-1940", "1941-1945", "1946-1950",  "1951-1955", "19
 "1971-1975", "1976-1980","1981-1985", "1986-1990","1991-1995",  "1996-2000",  "2001-2005",  "2006-2010", "2011-2015")
 
 library(animation)
-ani.options(interval=1.5,  ani.width = 900, ani.height= 900)
+ani.options(interval=1.5,  ani.width = 900, ani.height= 600)
 saveGIF(
   for (i in 1:length(years)){
     g<-ggplot(artmapfull[artmapfull$year==i,], aes(long, lat, group=group, fill=logfreq)) +geom_polygon() +

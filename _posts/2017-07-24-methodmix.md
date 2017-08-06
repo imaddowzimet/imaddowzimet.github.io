@@ -39,43 +39,29 @@ data <- as.data.frame(read_xls("/Users/isaacmaddowzimet/imaddowzimet.github.io/m
 data[is.na(data)] <- 0
 {% endhighlight %}
  
-The data looks like this, with method names as rows, and years as columns:
+The data looks like this, with method names as rows, and years as columns (I'm only showing a few years here so the table will fit):
 
 {% highlight r %}
-print(data)
+print(data[,1:4])
 {% endhighlight %}
 
 
 
 {% highlight text %}
-##                                         Method 1982 1988 1995 2002 2008
-## 1                         Female sterilization 12.9 16.6 17.8 16.7 16.5
-## 2                           Male sterilization  6.1  7.0  7.0  5.7  6.2
-## 3                                         Pill 15.6 18.5 17.3 18.9 17.1
-## 4                   Implant, Lunelle, or patch  0.0  0.0  0.9  0.8  0.3
-## 5                           3-month injectable  0.0  0.0  1.9  3.3  2.4
-## 6                           Contraceptive ring  0.0  0.0  0.0  0.0  1.8
-## 7                          Intrauterine device  4.0  1.2  0.5  1.3  3.5
-## 8                                    Diaphragm  4.5  3.5  1.2  0.2  0.1
-## 9                                       Condom  6.7  8.8 13.1 11.1 10.2
-## 10         Periodic abstinence calendar rhythm  1.8  1.0  1.3  0.7  0.6
-## 11 Periodic abstinence natural family planning  0.3  0.4  0.2  0.2  0.1
-## 12                                  Withdrawal  1.1  1.3  2.0  2.5  3.2
-## 13                               Other methods  2.7  1.3  1.1  0.6  0.2
-##    2012
-## 1  15.5
-## 2   5.1
-## 3  16.0
-## 4   0.8
-## 5   2.8
-## 6   1.6
-## 7   6.4
-## 8   0.0
-## 9   9.4
-## 10  0.7
-## 11  0.1
-## 12  3.0
-## 13  0.3
+##                                         Method 1982 1988 1995
+## 1                         Female sterilization 12.9 16.6 17.8
+## 2                           Male sterilization  6.1  7.0  7.0
+## 3                                         Pill 15.6 18.5 17.3
+## 4                   Implant, Lunelle, or patch  0.0  0.0  0.9
+## 5                           3-month injectable  0.0  0.0  1.9
+## 6                           Contraceptive ring  0.0  0.0  0.0
+## 7                          Intrauterine device  4.0  1.2  0.5
+## 8                                    Diaphragm  4.5  3.5  1.2
+## 9                                       Condom  6.7  8.8 13.1
+## 10         Periodic abstinence calendar rhythm  1.8  1.0  1.3
+## 11 Periodic abstinence natural family planning  0.3  0.4  0.2
+## 12                                  Withdrawal  1.1  1.3  2.0
+## 13                               Other methods  2.7  1.3  1.1
 {% endhighlight %}
  
 Because I want the denominator to be contraceptive users, as opposed to all women, I prorate the percent distribution of methods to add up to 100%. Normally, I might be pretty cautious about doing something like this, except that what I'm really interested in is how women's contraceptive method mix has changed over time - not whether women are using contraception more (also, overall levels of contraceptive use actually didn't change that drastically between 1988 and 2012). I then transpose the dataset (so that years are rows and methods are columns), because that's how *stackpoly*, the command we're going to use to make the stacked area chart, wants to see the data. 
@@ -91,8 +77,8 @@ n <- data.stand$Method                              # This just stores the metho
 datatranspose <- as.data.frame(t(data.stand[,-1]))  # This transposes, excluding the method column
 colnames(datatranspose) <- n                        # And this brings back in the column names (the methods)
  
-# Print the data
-print(datatranspose)
+# Print first three columns of the data
+print(datatranspose[,1:3])
 {% endhighlight %}
 
 
@@ -105,34 +91,6 @@ print(datatranspose)
 ## 2002             26.93548           9.193548 30.48387
 ## 2008             26.52733           9.967846 27.49196
 ## 2012             25.12156           8.265802 25.93193
-##      Implant, Lunelle, or patch 3-month injectable Contraceptive ring
-## 1982                  0.0000000           0.000000           0.000000
-## 1988                  0.0000000           0.000000           0.000000
-## 1995                  1.3996890           2.954899           0.000000
-## 2002                  1.2903226           5.322581           0.000000
-## 2008                  0.4823151           3.858521           2.893891
-## 2012                  1.2965964           4.538088           2.593193
-##      Intrauterine device Diaphragm   Condom
-## 1982            7.181329 8.0789946 12.02873
-## 1988            2.013423 5.8724832 14.76510
-## 1995            0.777605 1.8662519 20.37325
-## 2002            2.096774 0.3225806 17.90323
-## 2008            5.627010 0.1607717 16.39871
-## 2012           10.372771 0.0000000 15.23501
-##      Periodic abstinence calendar rhythm
-## 1982                           3.2315978
-## 1988                           1.6778523
-## 1995                           2.0217729
-## 2002                           1.1290323
-## 2008                           0.9646302
-## 2012                           1.1345219
-##      Periodic abstinence natural family planning Withdrawal Other methods
-## 1982                                   0.5385996   1.974865     4.8473968
-## 1988                                   0.6711409   2.181208     2.1812081
-## 1995                                   0.3110420   3.110420     1.7107309
-## 2002                                   0.3225806   4.032258     0.9677419
-## 2008                                   0.1607717   5.144695     0.3215434
-## 2012                                   0.1620746   4.862237     0.4862237
 {% endhighlight %}
  
 The problem is that now we still only have data points for the years with data. This would be fine if we wanted to do a set of stacked bar charts, but sometimes it's nice to get a sense of overall trends (and stacked bar charts can be misleading too, because they force the data years to be evenly spaced - which can make some trends look much sharper than they actually are).So we need to interpolate, which is basically using the information from the data we have to guess at the data we don't have.  Often people use linear interpolation, which is essentially just drawing a straight line between points; I'm using spline interpolation here, which uses a bit of fancy (but not that fancy) math to draw curved lines between points, guessing at the correct shape of the overall curve based on the information we have (that sound is 10 million mathematicians rolling over in their graves at my garbled definition).

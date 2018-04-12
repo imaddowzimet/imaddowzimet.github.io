@@ -5,7 +5,7 @@ published: true
 status: publish
 tags: R
 layout: post
-img: "/figures/unnamed-chunk-1-1.png" 
+img: /figures/unnamed-chunk-1-1.png 
 ---
  
 
@@ -74,7 +74,7 @@ text(.5,.22, "RESIST", cex=12)
 
 <img src="/figures/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="600px" style="display: block; margin: auto;" />
  
-For this last one, in particular, you might need to spend some time positioning things right, mainly because I couldn't figure out how to embed a dot product sign within one expression (you would think it would be straightforward, but I ran into some trouble getting it to look right). So this is a bit cobbled together - the omega, dot product and "m" are each placed separately and then aligned by eye. 
+For this last one, in particular, you might need to spend some time positioning things right, mainly because I couldn't figure out how to embed a dot product sign within one expression (you would think it would be straightforward, but I ran into some trouble getting it to look right). So this is a bit cobbled together - the omega, dot product and m are each placed separately and then aligned by eye. 
  
  
  

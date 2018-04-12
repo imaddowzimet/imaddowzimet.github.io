@@ -14,7 +14,9 @@
 
     <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
   </head>
-
+{% for post in site.posts %}
+<img src="{{ site.baseurl }}/{{ post.img }}">
+{% endfor %}
   <body>
     <div class="wrapper-masthead">
       <div class="container">
@@ -35,7 +37,6 @@
     </div>
 
     <div id="main" role="main" class="container">
-      {{ img   }}
       {{ content }}
     </div>
 

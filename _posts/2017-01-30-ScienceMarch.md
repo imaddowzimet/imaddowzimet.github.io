@@ -6,6 +6,7 @@ status: publish
 tags: R
 layout: post
 img: /images/headersci.png 
+excerpt: ""
 ---
  
 

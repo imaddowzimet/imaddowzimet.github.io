@@ -2,8 +2,8 @@
 layout: post
 title: "Prologue"
 author: "Isaac Maddow-Zimet"
-published: false
-status: process
+published: TRUE
+status: publish
 tags: R
 ---
 

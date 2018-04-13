@@ -1,8 +1,8 @@
 ---
 title: "Changes in contraceptive method mix over time"
 author: "Isaac Maddow-Zimet"
-published: no
-status: process
+published: TRUE
+status: publish
 tags: R
 layout: post
 ---

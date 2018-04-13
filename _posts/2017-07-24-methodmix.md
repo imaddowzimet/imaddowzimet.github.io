@@ -5,6 +5,8 @@ published: true
 status: publish
 tags: R
 layout: post
+img: https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/methodmix.png
+excerpt: ""
 ---
  
 

@@ -5,7 +5,7 @@ published: true
 status: publish
 tags: R
 layout: post
-img: /figures/unnamed-chunk-137-1.png
+img: /images/crosshatch
 excerpt: ""
 ---
  

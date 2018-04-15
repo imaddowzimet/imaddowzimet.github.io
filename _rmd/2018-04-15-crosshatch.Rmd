@@ -1,8 +1,8 @@
 ---
 title: "Adding crosshatch patterns to ggplot2 maps"
 author: "Isaac Maddow-Zimet"
-published: FALSE
-status: process
+published: TRUE
+status: post
 tags: R
 layout: post
 ---

@@ -156,7 +156,7 @@ Isaacland
 We end up with a dataframe that should look familiar -- it has the points that define the shape of the utopia that is **Isaacland**, and specifies the order in which they should be connected. When we connect the dots (which I've colored blue, and labelled with their order), the country looks like this:  
 <img src="/figures/unnamed-chunk-143-1.png" title="plot of chunk unnamed-chunk-143" alt="plot of chunk unnamed-chunk-143" style="display: block; margin: auto;" />
   
-What the `draw.crosshatch()` function first does is find the leftmost and rightmost points on the map.  These are marked in green in the graph below:  
+What the `draw.crosshatch()` function first does is find the leftmost and rightmost points on the map.  These are marked in red in the graph below:  
  
 <img src="/figures/unnamed-chunk-144-1.png" title="plot of chunk unnamed-chunk-144" alt="plot of chunk unnamed-chunk-144" style="display: block; margin: auto;" />
   

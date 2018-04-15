@@ -180,7 +180,7 @@ That...doesn't look too good.  What we want is to find the top and bottom latitu
  
 <img src="/figures/unnamed-chunk-148-1.png" title="plot of chunk unnamed-chunk-148" alt="plot of chunk unnamed-chunk-148" style="display: block; margin: auto;" />
   
-3) We then pick the point immediately before number 2 in the order (number 1, in this case), and find the slope of the line that connects them (in this case, the slope = $\frac{y_2-y_1}{x_2-x_1} = \frac{(60-40)}{(60-40)} = 1$.) From there, we can easily find the point where a vertical line drawn through the plus symbol should end: $endpoint_{top} = y_1 + (x_1-x_{plussymbol})*slope = 40 + (49-40)(1) = 49$.   
+3) We then pick the point immediately before number 2 in the order (number 1, in this case), and find the slope of the line that connects them (in this case, the slope = (y2-y1)/(x2-x1) = (60-40)/(60-40) = 1.) From there, we can easily find the point where a vertical line drawn through the plus symbol should end:  y1 + (x1-xplus)*slope = 40 + (49-40)(1) = 49.   
  
 <img src="/figures/unnamed-chunk-149-1.png" title="plot of chunk unnamed-chunk-149" alt="plot of chunk unnamed-chunk-149" style="display: block; margin: auto;" />
   

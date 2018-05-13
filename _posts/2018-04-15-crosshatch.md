@@ -15,7 +15,7 @@ I make a lot of maps in my day job -- both as a data exploration tool and as a w
  
 ## <span style="color:#923ba5">TL;DR:</span> How to add crosshatching or stripes to your ggplot map
  
-You can add crosshatching, vertical, or horizontal lines to your map using a combination of the `draw.crosshatch()` function, which I've made publically available here, and `geom_segment()`, which is the *ggplot2* function that actually draws the lines.  All that `draw.crosshatch()` requires is a shapefile dataframe that looks like this: 
+You can add crosshatching, vertical, or horizontal lines to your map using a combination of the *draw.crosshatch()* function, which I've made publically available here, and *geom_segment()*, which is the *ggplot2* function that actually draws the lines.  All that *draw.crosshatch()* requires is a shapefile dataframe that looks like this: 
  
 
 {% highlight r %}
@@ -53,7 +53,7 @@ fakedata <- as.data.frame(cbind(state.name, runif(50, min=0, max=100)))
 fakedata <- mutate(fakedata, state.name = tolower(state.name), fillvar = as.numeric(V2))
 {% endhighlight %}
  
-`draw.crosshatch()` needs to be applied to each distinct shapefile within our estimated states; luckily, this is easy to do by creating a list of dataframes (one for each *group*) using `nest()`, and then applying the function to each using `map_df` (thank you *purr* package!). The result is a dataframe that contains the start and end points of each line that will define the pattern on our map.
+*draw.crosshatch()* needs to be applied to each distinct shapefile within our estimated states; luckily, this is easy to do by creating a list of dataframes (one for each *group*) using *nest()*, and then applying the function to each using `map_df` (thank you *purr* package!). The result is a dataframe that contains the start and end points of each line that will define the pattern on our map.
  
 
 {% highlight r %}
@@ -71,7 +71,7 @@ lines <- map_df(fifty_states_estimated$data, draw.crosshatch, width = .5, patter
  
 The only other arguments you need to worry about are "width", which defines how close the lines will be together (in degrees), and "pattern", which can be either "vertical", "horizontal" or "crosshatch".
  
-Finally, I can plot! The only difference from a "normal" ggplot map is that I'm adding a `geom_segment()` option, which I'm feeding the **lines** dataframe to. The rest is just extra formatting.
+Finally, I can plot! The only difference from a "normal" ggplot map is that I'm adding a *geom_segment()* option, which I'm feeding the **lines** dataframe to. The rest is just extra formatting.
  
 
 {% highlight r %}
@@ -127,7 +127,7 @@ lines <- map_df(fifty_states_estimated$data, draw.crosshatch, width = .5, patter
  
 ## <del>Magnets</del> how does it work?
  
-Here's what I think is the interesting bit, which is how `draw.crosshatch()` actually works. I had to spend quite a while figuring out generic enough rules that it could find the start and end points of each line reliably, without getting tripped up by the weird shapes that geographic areas come in (oh why oh why couldn't countries and states just all be squares. Looking approvingly at you, Wyoming, and shaking my head at you, Michigan). Laying these rules out will also give you an idea of why it fails when it fails (and it does sometimes, definitely, though usually not too dramatically), and how it could possible be improved on. It's also worth mentioning that the full `draw.crosshatch()` function is of course available on github, and is really the authoritative version of what it's doing; what I've written below is really trying to just give a more conceptual idea of the approach.
+Here's what I think is the interesting bit, which is how *draw.crosshatch()* actually works. I had to spend quite a while figuring out generic enough rules that it could find the start and end points of each line reliably, without getting tripped up by the weird shapes that geographic areas come in (oh why oh why couldn't countries and states just all be squares. Looking approvingly at you, Wyoming, and shaking my head at you, Michigan). Laying these rules out will also give you an idea of why it fails when it fails (and it does sometimes, definitely, though usually not too dramatically), and how it could possible be improved on. It's also worth mentioning that the full *draw.crosshatch()* function is of course available on github, and is really the authoritative version of what it's doing; what I've written below is really trying to just give a more conceptual idea of the approach.
  
 To help lay it out, I'm going to come up with a fake country, **Isaacland**, and give it absurdly simplified borders.  
  

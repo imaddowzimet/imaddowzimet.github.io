@@ -11,7 +11,7 @@ excerpt: ""
  
 
  
-I make a lot of maps in my day job -- both as a data exploration tool and as a way to communicate geographic patterns -- and one of the things that I've run up against is that there's no easy way (that I can tell) to add overlay patterns in *ggplot2*. It seems like there here may be some technical reasons behind this (see [here](https://stackoverflow.com/questions/2895319/how-to-add-texture-to-fill-colors-in-ggplot2/2901210#2901210), and [here](https://stackoverflow.com/questions/26110160/how-to-apply-cross-hatching-to-a-polygon-using-the-grid-graphical-system/26110400#26110400)), but I also think patterns are sometimes frowned upon as an aesthetic in a way that I'm not convinced is warranted. In particular, I think crosshatching or stripes can be a nice way to set apart data that is qualitatively different in some way from the data that surround it; in my case, I'm often looking for a way to distinguish data that are *estimated* (from a regression model, for example) vs. data that are *"real."* I'd found some workarounds online (including some using different mapping functions), but I really wanted to come up with a solution that worked within *ggplot2* -- and since I couldn't find exactly what I was looking for, I thought I would code it up myself.  I think the way I ended up solving it is interesting (although I'm *100%* sure there are easier ways), so I'm documenting it here; because some of you may just want the solution though, here's the too-long-didn't-read version about how to use the code:
+I make a lot of maps in my day job -- both as a data exploration tool and as a way to communicate geographic patterns -- and one of the things that I've run up against is that there's no easy way (that I can tell) to add overlay patterns in *ggplot2*. It seems like there may be some technical reasons behind this (see [here](https://stackoverflow.com/questions/2895319/how-to-add-texture-to-fill-colors-in-ggplot2/2901210#2901210), and [here](https://stackoverflow.com/questions/26110160/how-to-apply-cross-hatching-to-a-polygon-using-the-grid-graphical-system/26110400#26110400)), but I also think patterns are sometimes frowned upon as an aesthetic in a way that I'm not convinced is warranted. In particular, I think crosshatching or stripes can be a nice way to set apart data that is qualitatively different in some way from the data that surround it; in my case, I'm often looking for a way to distinguish data that are *estimated* (from a regression model, for example) vs. data that are *"real."* I'd found some workarounds online (including some using different mapping functions), but I really wanted to come up with a solution that worked within *ggplot2* -- and since I couldn't find exactly what I was looking for, I thought I would code it up myself.  I think the way I ended up solving it is interesting (although I'm *100%* sure there are easier ways), so I'm documenting it here; because some of you may just want the solution though, here's the too-long-didn't-read version about how to use the code:
  
 ## <span style="color:#923ba5">TL;DR:</span> How to add crosshatching or stripes to your ggplot map
  
@@ -156,7 +156,7 @@ Isaacland
 We end up with a dataframe that should look familiar -- it has the points that define the shape of the utopia that is **Isaacland**, and specifies the order in which they should be connected. When we connect the dots (which I've colored blue, and labelled with their order), the country looks like this:  
 <img src="/figures/unnamed-chunk-143-1.png" title="plot of chunk unnamed-chunk-143" alt="plot of chunk unnamed-chunk-143" style="display: block; margin: auto;" />
   
-What the `draw.crosshatch()` function first does is find the leftmost and rightmost points on the map.  These are marked in green in the graph below:  
+What the `draw.crosshatch()` function first does is find the leftmost and rightmost points on the map.  These are marked in red in the graph below:  
  
 <img src="/figures/unnamed-chunk-144-1.png" title="plot of chunk unnamed-chunk-144" alt="plot of chunk unnamed-chunk-144" style="display: block; margin: auto;" />
   
@@ -180,7 +180,7 @@ That...doesn't look too good.  What we want is to find the top and bottom latitu
  
 <img src="/figures/unnamed-chunk-148-1.png" title="plot of chunk unnamed-chunk-148" alt="plot of chunk unnamed-chunk-148" style="display: block; margin: auto;" />
   
-3) We then pick the point immediately before number 2 in the order (number 1, in this case), and find the slope of the line that connects them (in this case, the slope = $\frac{y_2-y_1}{x_2-x_1} = \frac{(60-40)}{(60-40)} = 1$.) From there, we can easily find the point where a vertical line drawn through the plus symbol should end: $endpoint_{top} = y_1 + (x_1-x_{plussymbol})*slope = 40 + (49-40)(1) = 49$.   
+3) We then pick the point immediately before number 2 in the order (number 1, in this case), and find the slope of the line that connects them (in this case, the slope = (y2-y1)/(x2-x1) = (60-40)/(60-40) = 1.) From there, we can easily find the point where a vertical line drawn through the plus symbol should end:  y1 + (x1-xplus)*slope = 40 + (49-40)(1) = 49.   
  
 <img src="/figures/unnamed-chunk-149-1.png" title="plot of chunk unnamed-chunk-149" alt="plot of chunk unnamed-chunk-149" style="display: block; margin: auto;" />
   

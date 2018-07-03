@@ -1,0 +1,129 @@
+---
+title: "Mapping calls to 311 about fireworks"
+author: "Isaac Maddow-Zimet"
+published: FALSE
+status: process
+tags: R
+layout: post
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I'm a lifelong resident of NYC, and one of the (only) nice things about summer here is that every year as July 4th approaches, you'll start seeing (and hearing) more and more fireworks in the sky. Some of these are from planned events, but the vast majority are...unauthorized.  
+
+Because they aren't exactly looked kindly on by the city, there's no registry of these - but because a lot of people don't like them, there is a record of sorts -- namely, calls to 311 complaining about them. And since NYC makes all 311 calls publically available, I thought it would be interesting to plot a selection of them - for the days leading up to and right after July 4th. And since I make almost everything a GIF, I thought I would make it a GIF.  So here's how I did it:
+
+## The code
+
+I used quite a few libraries for this -- aside from **ggmap**, **readr** and **dplyr** -- I used one package that I knew about and already loved (**gganimate**, which makes creating GIFs easy), and one that I didn't know about but now am obsessed with (**ggimage**, by Guangchuang Yu, which lets you plot icons or images directly from within **ggplot2**).
+
+```{r, message=FALSE}
+library(ggmap)     # For grabbing the map of NYC we'll use from Google Maps
+library(readr)     # For loading in csv data from NYC Open Data
+library(dplyr)     # For data manipulation
+library(ggimage)   # For bringing in the cool fireworks symbols
+library(gganimate) # For making a GIF
+```
+
+I then loaded the data from NYC Open Data, which is a pretty awesome data portal; among other things, it lets you do direct API calls to specific datasets.  They have 311 calls from 2010 to the present - I downloaded only those where the complaint was "Illegal Fireworks."
+
+```{r, message=FALSE}
+fireworks311 <- read_csv("https://data.cityofnewyork.us/resource/fhrw-4uyv.csv?$limit=2000&complaint_type=Illegal%20Fireworks")
+
+select(fireworks311, created_date, latitude, longitude, complaint_type)
+```
+
+Note that the latitude and longitude here is the caller's location - not the fireworks - but I'm assuming for these purposes that it's closeish to where the fireworks are. 
+
+I then had to do a bit of data manipulation, mainly to do with dates. First, I limited the dataset to 2017 (though the dataset is actually updated daily, so you could recreate my plots for 2018 up to yesterday's date).
+
+```{r, message=FALSE}
+
+# Limit to 2017
+fireworks311.2017     <- fireworks311 %>%
+                         mutate(year = format(fireworks311$created_date, format= "%y")) %>%
+                         filter(year == 17)
+```
+
+More importantly though, I had to fix a "problem" with the 311 dataset, which is that the only dates represented are dates with complaints.  That makes sense, of course -- it's a dataset of complaints -- but I wanted to include days with no fireworks complaints as well, so my GIF wouldn't skip over days. So I created a dataset of all the days in 2017, with the latitude and longitude of the fake complaints set to an arbitrary point within NYC (doesn't matter because I'm not going to plot them), and appended them to the main dataset.
+
+```{r, message=FALSE}
+# Create dataset of all days in 2017
+alldates <- data_frame(as.POSIXct(seq(from = as.Date("2017/1/1"), 
+                                      to = as.Date("2017/12/31"), 
+                                      by="days")), 
+                       rep(times=365, -74.1987), 
+                       rep(times=365, 40.61987), rep(times=365, 1))
+colnames(alldates) <- c("created_date", "longitude", "latitude", "fakedate")
+
+# Append it to main dataset
+fireworks311.2017.complete <- bind_rows(fireworks311.2017, alldates)
+
+# Limit to June and July, and create factor for date (this will define each animation frame)
+fireworks311toplot    <- fireworks311.2017.complete %>%
+                         mutate(dateorder = format(created_date, format= "%m-%d"),
+                                date      = format(created_date, format= "%B %d"),
+                                month     = months(created_date)) %>%
+                         filter(month %in% c("June", "July"))
+fireworks311toplot    <- fireworks311toplot[order(fireworks311toplot$dateorder),]
+fireworks311toplot$datefactor <- factor(fireworks311toplot$date, levels=unique(fireworks311toplot$date))
+```
+
+I decided points would be too boring, so I downloaded some firework icons (source at bottom of graph), and randomly assigned them to each complaint. I then assigned a blank image to the fake complaints so they wouldn't show up.
+
+```{r, message=FALSE}
+# Load images of fireworks!
+images <- c("https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/images/fireworks.png",
+            "https://raw.githubusercontent.com/imaddowzimet/imaddowzimet.github.io/master/images/fireworks%20(4).png",
+            "https://raw.githubusercontent.com/imaddowzimet/imaddowzimet.github.io/master/images/fireworks%20(5).png",
+            "https://raw.githubusercontent.com/imaddowzimet/imaddowzimet.github.io/master/images/fireworks%20(6).png",
+            "https://raw.githubusercontent.com/imaddowzimet/imaddowzimet.github.io/master/images/fireworks%20(7).png")
+# Assign them randomly to each observation
+fireworks311toplot$image <- sample(images, size=length(fireworks311toplot$datefactor), replace=T)
+# For added dates, assign a blank image
+fireworks311toplot$image[fireworks311toplot$fakedate == 1] <- "https://upload.wikimedia.org/wikipedia/commons/d/d2/Blank.png"
+```
+
+I then loaded a map of NYC, and created my plot:
+
+```{r, message=FALSE}
+
+# Load NYC map
+NYC <- get_map("New York City, New York", maptype = "terrain", color="bw")
+
+# Plot!
+fireworksmapgif <- ggmap(NYC) + 
+                   geom_image(data=filter(fireworks311toplot, 
+                                       created_date>="2017-06-15 00:00:00" & 
+                                        created_date<="2017-07-15 00:00:00" ), 
+                           aes(y=latitude, 
+                               x=longitude, 
+                               frame=datefactor, 
+                               image=image), size=.1) + 
+                xlim(-74.3, -73.7) + 
+                ylim(40.5, 40.9)   + 
+                ggtitle("Complaints to 311 about fireworks in 2017:") + 
+                labs(caption="Source: NYC Open Data. 311 Service Requests from 2010 to Present. https://bit.ly/1akZfYR \nFirework icons made by Freepik and Pause08 and downloaded from www.flaticon.com  ") + 
+                theme(plot.title = element_text(hjust = 0.5, size=40, color="#000000", margin = margin(b = 20)),
+                      axis.line=element_blank(),
+                      axis.text.x=element_blank(),
+                      axis.text.y=element_blank(),
+                      axis.ticks=element_blank(),
+                      axis.title.x=element_blank(),
+                      axis.title.y=element_blank(), plot.caption = element_text(size=20, hjust=0)) 
+```
+
+Finally, I used the **gganimate** package to make the GIF:
+```{r, message=FALSE, eval=FALSE}
+
+gganimate(fireworksmapgif, interval=.6, filename="fireworks.gif", ani.width=1000, ani.height=1200, autobrowse = FALSE)
+
+```
+
+And here it is!
+
+![](https://github.com/imaddowzimet/imaddowzimet.github.io/raw/master/fireworks.gif)
+
+
